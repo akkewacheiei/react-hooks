@@ -1,6 +1,12 @@
 "use client";
-import React, { useState, useEffect, useRef, useReducer } from "react";
-import Welcome from "../components/welcome"; //props //Ex.ส่ง props ไปต่าง component
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useReducer,
+  useCallback,
+} from "react";
+import Welcome from "../components/welcome";
 import Login from "../components/login"; //useContext //Ex.กรณีต้องส่ง props หลายต่อควรเปลี่ยนมาใช้ useContext
 import TextInputWithFocusButton from "../components/InputWithFocusBtn"; //useRef //Ex.ใช้เข้าถึง DOM elements โดยตรง
 import ExpensiveComponent from "../components/expensiveComponent"; // useMemo
@@ -34,6 +40,10 @@ export default function Page() {
     }
   }, [count]);
 
+  const increment = useCallback(() => {
+    setCount((count) => count + 1);
+  }, []);
+
   return (
     <div className="p-10">
       <h1 className=" text-2xl text-red-500 font-bold mb-5">Demo 7 Hooks</h1>
@@ -54,14 +64,10 @@ export default function Page() {
         </p>
         <button
           className=" border-[1px] border-red-400 bg-red-400 rounded-md"
-          onClick={() => setCount(count + 1)}
+          onClick={increment}
         >
           Click here
         </button>
-        <h1 className="mt-2">
-          useMemo (ใช้จำค่าได้ เมื่อ dependencies เปลี่ยนค่อยคำนวนใหม่)
-        </h1>
-        <ExpensiveComponent count={count} a={10} b={20} />
       </div>
 
       <TextInputWithFocusButton />
@@ -74,6 +80,8 @@ export default function Page() {
       >
         <Login />
       </AuthContext.Provider>
+
+      <ExpensiveComponent count={count} a={10} b={20} onClick={increment} />
     </div>
   );
 }
